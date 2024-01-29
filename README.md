@@ -10,6 +10,8 @@ Lifecycle Configurations (LCCs) provide a mechanism to customize JupyterLab appl
 
 ## Sample Scripts
 - [auto-stop-idle](scripts/auto-stop-idle/) - Automatically shuts down JupyterLab applications that have been idle for a configurable time.
+- [change-home-folder](scripts/change-home-folder) - Clone a git repo and set it as the user's root folder.
+- [remove-kernels](scripts/remove-kernels) - Remove all Spark/pySpark kernels from Jupyterlab launcher.
 
 ## Developing LLCs for SageMaker Studio JupyterLab
 For best practices, please check [DEVELOPMENT](DEVELOPMENT.md).
