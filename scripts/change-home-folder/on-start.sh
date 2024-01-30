@@ -3,7 +3,6 @@
 
 #!/bin/bash
 set -eux
-ASI_VERSION=0.2.0
 
 # OVERVIEW
 # This script clones a specific repository and updates the JupyterLab file explorer to use the cloned repo as root folder
