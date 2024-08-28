@@ -5,9 +5,9 @@ The `on-start.sh` script, designed to run as a [SageMaker Studio lifecycle confi
 
 From a terminal appropriately configured with AWS CLI, run the following commands:
   
-    ASI_VERSION=0.2.0
-    curl -LO https://github.com/aws-samples/sagemaker-studio-jupyterlab-lifecycle-config-examples/releases/download/v$ASI_VERSION/auto-stop-idle-$ASI_VERSION.tar.gz
-    tar -xvzf auto-stop-idle-$ASI_VERSION.tar.gz
+    ASI_VERSION=0.3.1
+    curl -LO https://github.com/aws-samples/sagemaker-studio-apps-lifecycle-config-examples/releases/download/v$ASI_VERSION/jupyterlab-lccs-$ASI_VERSION.tar.gz
+    tar -xvzf jupyterlab-lccs-$ASI_VERSION.tar.gz
 
     cd auto-stop-idle
 
@@ -83,9 +83,9 @@ Following are the instructions on how to modify the lifecycle configuration to s
 1. Download and extract the auto-stop-idle solution tarball:
   
     ```
-    ASI_VERSION=0.2.0
-    curl -LO https://github.com/aws-samples/sagemaker-studio-jupyterlab-lifecycle-config-examples/releases/download/v$ASI_VERSION/auto-stop-idle-$ASI_VERSION.tar.gz
-    tar -xvzf auto-stop-idle-$ASI_VERSION.tar.gz
+    ASI_VERSION=0.3.1
+    curl -LO https://github.com/aws-samples/sagemaker-studio-apps-lifecycle-config-examples/releases/download/v$ASI_VERSION/jupyterlab-lccs-$ASI_VERSION.tar.gz
+    tar -xvzf jupyterlab-lccs-$ASI_VERSION.tar.gz
     ```
 
 2. Download and copy the auto stop idle Python package to a location of choice in Amazon S3. The Execution Role associated to the Studio domain or user profiles must have IAM policies that allow read access to such S3 location.
@@ -94,11 +94,11 @@ Following are the instructions on how to modify the lifecycle configuration to s
     cd auto-stop-idle
 
     PYTHON_PACKAGE=sagemaker_studio_jlab_auto_stop_idle-$ASI_VERSION.tar.gz
-    curl -LO https://github.com/aws-samples/sagemaker-studio-jupyterlab-lifecycle-config-examples/releases/download/v$ASI_VERSION/$PYTHON_PACKAGE
+    curl -LO https://github.com/aws-samples/sagemaker-studio-apps-lifecycle-config-examples/releases/download/v$ASI_VERSION/$PYTHON_PACKAGE
     aws s3 cp $PYTHON_PACKAGE s3://<your_bucket_name>/<your_prefix>/
     ```
 
-3. Edit the `on-start.sh` file and replace line 45 with:
+3. Edit the `on-start.sh` file and replace line 56 with:
 
     ```
     sudo aws s3 cp s3://<your_bucket_name>/<your_prefix>/$PYTHON_PACKAGE /var/tmp/
