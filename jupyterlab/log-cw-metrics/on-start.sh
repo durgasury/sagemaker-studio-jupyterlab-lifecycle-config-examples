@@ -5,10 +5,12 @@
 set -eux
 
 CONDA_HOME=/opt/conda/bin
-PYTHON_SCRIPT_PATH=/var/tmp/log_metrics.py  # update it to use your path
+PYTHON_SCRIPT_PATH=/var/tmp/log_metrics.py
 LOG_FILE=/var/log/apps/app_container.log
 sudo apt-get update -y
 
+# download the script 
+curl -LO --output-dir /var/tmp/ https://raw.githubusercontent.com/durgasury/sagemaker-studio-jupyterlab-lifecycle-config-examples/cpu-gpu-metrics/jupyterlab/log-cw-metrics/log_metrics.py
 # Check if cron needs to be installed  ## Handle scenario where script exiting("set -eux") due to non-zero return code by adding true command.
 status="$(dpkg-query -W --showformat='${db:Status-Status}' "cron" 2>&1)" || true 
 if [ ! $? = 0 ] || [ ! "$status" = installed ]; then
@@ -32,4 +34,4 @@ sudo /bin/bash -c "echo 'AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION' >> /etc/environ
 
 # Add script to crontab for root.
 echo "Adding log_metrics script to crontab..."
-echo "* * * * * /bin/bash -ic '$CONDA_HOME/python $PYTHON_SCRIPT_PATH >> $LOG_FILE 2>&1'" | sudo crontab -
+echo "*/5 * * * * /bin/bash -ic '$CONDA_HOME/python $PYTHON_SCRIPT_PATH >> $LOG_FILE 2>&1'" | sudo crontab -

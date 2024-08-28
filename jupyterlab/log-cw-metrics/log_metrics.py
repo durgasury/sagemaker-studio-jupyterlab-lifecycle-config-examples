@@ -9,7 +9,7 @@ import subprocess
 import logging as log
 
 
-def ReadFromFile(filename):
+def read_from_file(filename):
     """
     Function to read data from json files
     """
@@ -19,12 +19,11 @@ def ReadFromFile(filename):
         return data
     except FileNotFoundError:
         log.error(f"File {filename} not found")
-        raise FileNotFoundError(f"File {filename} not found")
     except Exception as error:
-        UnhandledError(error)
+        log.error(error)
 
 
-def query_JS(host, port, url):
+def query_metrics(host, port, url):
     response = requests.get(f'http://{host}:{port}/{url}')
     if response.status_code == 200:
         return json.loads(response.text)
@@ -68,7 +67,7 @@ if __name__ == "__main__":
     failed = False
     resource_metadata = "/opt/ml/metadata/resource-metadata.json"
     name_space = "/aws/sagemaker/studio"
-    resource_meta = ReadFromFile(resource_metadata)
+    resource_meta = read_from_file(resource_metadata)
     domain_id = resource_meta["DomainId"]
     space_name = resource_meta.get("SpaceName", "NoSpaceName")
     sm_client = boto3.client('sagemaker')
@@ -103,7 +102,7 @@ if __name__ == "__main__":
     ]
     try:
         cw_client = boto3.client("cloudwatch")
-        metrics = query_JS(host, port, url)
+        metrics = query_metrics(host, port, url)
 
         if is_gpu_instance(instance_type):
             cw_client.put_metric_data(
