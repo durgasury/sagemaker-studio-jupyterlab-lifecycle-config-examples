@@ -18,6 +18,8 @@ Lifecycle Configurations (LCCs) provide a mechanism to customize SageMaker Studi
 - [change-home-folder](scripts/change-home-folder) - Clone a git repo and set it as the user's root folder.
 - [remove-kernels](scripts/remove-kernels) - Remove all Spark/pySpark kernels from Jupyterlab launcher.
 - [upgrade-cli](scripts/upgrade-cli) - Upgrades AWS CLI to get user profile name from a Jupyterlab space.
+- [set-env-variable](scripts/set-env-variable) - Sets common environment variables used by terminal and kernel sessions.
+- [push-metrics](scripts/push-metrics) - Push CPU, GPU, mem and disk metrics to Cloudwatch on a regular interval.
 
 ### [SageMaker Code Editor](https://docs.aws.amazon.com/sagemaker/latest/dg/code-editor.html)
 - [auto-stop-idle](code-editor/auto-stop-idle/) - Automatically shuts down Code Editor applications that have been idle for a configurable time.
