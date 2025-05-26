@@ -10,7 +10,7 @@ LOG_FILE=/var/log/apps/app_container.log
 sudo apt-get update -y
 
 # download the script 
-curl -LO --output-dir /var/tmp/ https://raw.githubusercontent.com/durgasury/sagemaker-studio-jupyterlab-lifecycle-config-examples/jupyterlab/push-metrics/log_metrics.py
+curl -LO --output-dir /var/tmp/ https://raw.githubusercontent.com/durgasury/sagemaker-studio-jupyterlab-lifecycle-config-examples/refs/heads/main/jupyterlab/push-metrics/log_metrics.py
 # Check if cron needs to be installed  ## Handle scenario where script exiting("set -eux") due to non-zero return code by adding true command.
 status="$(dpkg-query -W --showformat='${db:Status-Status}' "cron" 2>&1)" || true 
 if [ ! $? = 0 ] || [ ! "$status" = installed ]; then
