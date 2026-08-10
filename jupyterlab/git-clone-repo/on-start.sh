@@ -10,11 +10,10 @@ set -eux
 # and sets the JupyterLab file browser root to the cloned repo folder.
 #
 # Prerequisites:
-#   1. Environment variables set on the Space or Domain:
-#      - GIT_REPO_URL: HTTPS URL of the Git repository (e.g., https://github.com/org/repo.git)
+#   1. Set the REPO_URL variable below to your Git repository HTTPS URL.
 #   2. A secret in AWS Secrets Manager named "git-creds/<username>" containing a JSON object:
 #      { "username": "<git-username>", "pat": "<personal-access-token>" }
-#      where <username> matches the SageMaker User Profile name (SAGEMAKER_USER_PROFILE_NAME).
+#      where <username> matches the UserProfileName from /opt/ml/metadata/resource-metadata.json.
 #   3. The Space/Domain execution role must have permissions for:
 #      - secretsmanager:GetSecretValue on the relevant secret ARN
 #   4. Internet connectivity from the JupyterLab app (to clone/push to the remote repo)
@@ -28,9 +27,10 @@ AUTO_PUSH_INTERVAL_HOURS=4  # How often (in hours) to auto-commit and push chang
 HOME_DIR=/home/sagemaker-user
 LOG_FILE=/var/log/apps/app_container.log
 CONDA_HOME=/opt/conda/bin
-USERNAME="${SAGEMAKER_USER_PROFILE_NAME}"
+METADATA_FILE=/opt/ml/metadata/resource-metadata.json
+USERNAME=$(python3 -c "import json; print(json.load(open('${METADATA_FILE}'))['UserProfileName'])")
 SECRET_NAME="git-creds/${USERNAME}"
-REPO_URL="${GIT_REPO_URL}"
+REPO_URL="<ENTER_YOUR_GIT_REPO_HTTPS_URL_HERE>"  # e.g., https://github.com/org/repo.git
 
 # Extract repo folder name from URL (e.g., https://github.com/org/repo.git -> repo)
 REPO_FOLDER=$(basename "${REPO_URL}" .git)
@@ -41,8 +41,8 @@ AUTO_PUSH_SCRIPT="/var/tmp/git-auto-push.sh"
 
 echo "Retrieving Git credentials from Secrets Manager for: ${SECRET_NAME}"
 
-# Get the AWS region from instance metadata or default
-AWS_REGION=$(aws configure get region 2>/dev/null || echo "us-east-1")
+# Get the AWS region from resource metadata ARN (e.g., arn:aws:sagemaker:us-east-2:123456:app/...)
+AWS_REGION=$(python3 -c "import json; print(json.load(open('${METADATA_FILE}'))['ResourceArn'].split(':')[3])")
 
 SECRET_VALUE=$(aws secretsmanager get-secret-value \
     --secret-id "${SECRET_NAME}" \
@@ -64,8 +64,10 @@ echo "https://${GIT_USERNAME}:${GIT_PAT}@${REPO_HOST}" > "${HOME_DIR}/.git-crede
 chmod 600 "${HOME_DIR}/.git-credentials"
 
 # Configure git user identity
-git config --global user.name "${USERNAME}"
-git config --global user.email "${USERNAME}@users.noreply.github.com"
+GIT_USER_NAME="<ENTER_YOUR_GIT_USER_NAME_HERE>"   # e.g., John Doe
+GIT_USER_EMAIL="<ENTER_YOUR_GIT_USER_EMAIL_HERE>" # e.g., johndoe@example.com
+git config --global user.name "${GIT_USER_NAME}"
+git config --global user.email "${GIT_USER_EMAIL}"
 
 # ─── Clone or Update Repository ─────────────────────────────────────────────────
 

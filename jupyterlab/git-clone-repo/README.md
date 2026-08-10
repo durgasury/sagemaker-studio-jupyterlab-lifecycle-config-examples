@@ -20,13 +20,15 @@ Teams where:
 
 ## Prerequisites
 
-### 1. Environment Variable
+### 1. Configure the Script
 
-Set the following environment variable on the Space or Domain:
+Edit `on-start.sh` and replace the following placeholders:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `GIT_REPO_URL` | HTTPS URL of the Git repository | `https://github.com/org/repo.git` |
+| Placeholder | Description | Example |
+|-------------|-------------|---------|
+| `<ENTER_YOUR_GIT_REPO_HTTPS_URL_HERE>` | HTTPS URL of the Git repository | `https://github.com/org/repo.git` |
+| `<ENTER_YOUR_GIT_USER_NAME_HERE>` | Git display name for commits | `John Doe` |
+| `<ENTER_YOUR_GIT_USER_EMAIL_HERE>` | Git email for commits | `johndoe@example.com` |
 
 ### 2. Secrets Manager Secret
 
@@ -41,7 +43,7 @@ For each user, create a secret in AWS Secrets Manager:
   }
   ```
 
-The `<sagemaker-user-profile-name>` must match exactly the SageMaker User Profile name assigned to the user in IAM Identity Center.
+The `<sagemaker-user-profile-name>` must match exactly the SageMaker User Profile name assigned to the user in IAM Identity Center. The script reads this from `/opt/ml/metadata/resource-metadata.json` (the `UserProfileName` field).
 
 ### 3. IAM Permissions
 
